@@ -1,104 +1,118 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import WheelComponent from "./weel";
 import "./index.css";
 import "./App.css";
 import TrPortal from "./portal";
 import Confetti from "react-confetti";
+import Test from "./test";
+import axios from "axios";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      portal: false,
-      show: false,
-    };
-  }
- 
-  render() {
-    let objIndex = {
-      "Iphone13promax": 1, 
-      "Bosesurroundspeakers": 2, 
-      "Samsung65-InchCrystalUHD4KFlatSmartTV": 3, 
-      "MacBookAirMGN6314”Display,AppleM1ChipWith8-Core": 4, 
-      "KIATELLURIDE2022": 5,
-      "SAMSUNGFRONTLOADWASHINGMACHINE16KG": 6,
-      "10GRAMSGOLDCOIN": 7,
-      "VOUCHERFORGEORGIAFAMILYTRIPUPTO4": 8,
-      "AMAZONGIFTVOUCHERWORTH1000AED": 9,
-      "APPLEAIRPODSPRO":10
+const App = () => {
+  const [portal, setPortal] = useState(false);
+  const [show, setShow] = useState(false);
+  const [userIP, setUserIP] = useState('');
+
+
+  const segments = [
+    "ايفون",
+    "سماعة",  
+    "تلفزيون ",
+    "لابتوب",
+    "ثلاجة",
+    "غسالة",
+    "ريال",
+    "قرشين",
+    "بطاقة هدايا",
+    "سماعة ايربودز",
+  ];
+
+  const weelColors = () => {
+    let arr = [];
+    let colors = ["#36A1BC", "#0B4F6A", "#90CBDA", "#228DA8", "#052C36"];
+    segments.forEach((el) => {
+      let color = colors.shift();
+      arr.push(color);
+      colors.push(color);
+    });
+
+    return arr;
+  };
+  const segColors = weelColors();
+  const fetchUserIP = async () => {
+    try {
+      const ipResponse = await axios.get('https://api.ipify.org?format=json');
+      setUserIP(ipResponse.data.ip);
+      console.log("ip  ", ipResponse.data.ip);
+      console.log("userIp  ", userIP);
+      return ipResponse.data.ip; // Return the fetched IP address
+    } catch (error) {
+      console.error('Error fetching IP:', error);
+      return null;
     }
-    const segments = [
-      "I phone 13 pro max",
-      "Bose surround speakers",  
-      "Samsung 65-Inch Crystal UHD 4K Flat Smart TV ",
-      "MacBook Air MGN63 14” Display, Apple M1 Chip With 8-Core",
-      "KIA TELLURIDE 2022",
-      "SAMSUNG FRONT LOAD WASHING MACHINE 16KG",
-      "10GRAMS GOLD COIN",
-      "VOUCHER FOR GEORGIA FAMILY TRIP UPTO 4",
-      "AMAZON GIFT VOUCHER WORTH 1000AED",
-      "APPLE AIRPODS PRO",
-    ];
-
-    const weelColors = () => {
-      let arr = [];
-      let colors = ["#EE4040", "#F0CF50", "#815CD1", "#3DA5E0", "#34A24F"];
-      segments.forEach((el) => {
-        let color = colors.shift();
-        arr.push(color);
-        colors.push(color);
+  };
+  
+  const onFinished = async (winner) => {
+    setPortal(false);
+    setShow(winner);
+  
+    const userIp = await fetchUserIP(); // Wait for fetchUserIP to complete
+    
+    console.log("winner", winner);
+    if (!userIp) {
+      console.error('User IP not available.');
+      return;
+    }
+    try {
+      const response = await axios.post('https://64d8b3c25f9bf5b879ce7999.mockapi.io/users', {
+        winner: winner,
+        ip: userIp // Use the fetched IP address
       });
-
-      return arr;
-    };
-    const segColors = weelColors();
-
-    const onFinished = (winner) => {
-      this.setState({ portal: false, show: winner });
-    };
-
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          paddingTop: "150px",
-          paddingBottom: "150px",
-          background: "#f0f0f0",
-        }}
-      >
-        {this.state.show && <Confetti width={1600} height={1019} />}
-        <WheelComponent
-          segments={segments}
-          segColors={segColors}
-          winningSegment={"8"}
-          onFinished={(winner) => onFinished(winner)}
-          primaryColor="gray"
-          contrastColor="white"
-          buttonText="Spin"
-          isOnlyOnce={true}
-        />
-        {this.state.portal ? <TrPortal /> : null}
-        {this.state.show && (
-          <div className="box">
-            <div className="imageBox">
-            </div>
-            <h2 className="titleWin">
-              CONGRATULATIONS!!! YOU HAVE WON {this.state.show} !!!
-            </h2>
-            <div className="closeContainer">
-              <button
-                className="closepankaj"
-                onClick={() => this.setState({ show: false })}
-              >
-                OK
-              </button>
-            </div>
+      // console.log("userIP", userIp);
+      // console.log(response.data);
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
+  };
+  
+  return (
+    <>
+    <div className="h-screen p-4 w-full relative flex flex-col justify-center items-center gap-5"
+    >
+      {/* <Test /> */}
+      <h1 className="text-center font-bold text-7xl text-cyan-100 ">ضربة حظ!</h1>
+      {show && <Confetti width={600} height={1120} />}
+      <WheelComponent
+        segments={segments}
+        segColors={segColors}
+        winningSegment={"8"}
+        onFinished={(winner) => onFinished(winner)}
+        primaryColor="#5C9DAE"
+        contrastColor="white"
+        buttonText="ابدأ"
+        isOnlyOnce={true}
+      />
+      {portal && <TrPortal />}
+      {show && (
+        <div className=" absolute h-[210vh] w-[153vw] text-center py-20 px-5  bg-slate-600/50 flex flex-col justify-around">
+          <div className="bg-slate-50 w-full py-20 p-5 rounded-md shadow-lg flex flex-col gap-16">
+          <h2 className="text-5xl">
+            مبروك!!! فزت معنا ب{show} !!!
+          </h2>
+          <div className="">
+            <button
+              className="text-5xl text-white font-semibold bg-cyan-500 p-3 px-16"
+              onClick={() => setShow(false)}
+            >
+              تم
+            </button>
           </div>
-        )}
-      </div>
-    );
-  }
-}
+          </div>
+        </div>
+      )}
+    </div>
+    </>
+
+  );
+};
 
 export default App;
