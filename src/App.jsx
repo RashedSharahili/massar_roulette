@@ -12,35 +12,23 @@ const App = () => {
   const [show, setShow] = useState(false);
   const [userIP, setUserIP] = useState('');
 
-  const objIndex = {
-    "Iphone13promax": 1, 
-    "Bosesurroundspeakers": 2, 
-    "Samsung65-InchCrystalUHD4KFlatSmartTV": 3, 
-    "MacBookAirMGN6314”Display,AppleM1ChipWith8-Core": 4, 
-    "KIATELLURIDE2022": 5,
-    "SAMSUNGFRONTLOADWASHINGMACHINE16KG": 6,
-    "10GRAMSGOLDCOIN": 7,
-    "VOUCHERFORGEORGIAFAMILYTRIPUPTO4": 8,
-    "AMAZONGIFTVOUCHERWORTH1000AED": 9,
-    "APPLEAIRPODSPRO":10
-  };
 
   const segments = [
-    "I phone 13 pro max",
-    "Bose surround speakers",  
-    "Samsung 65-Inch Crystal UHD 4K Flat Smart TV ",
-    "MacBook Air MGN63 14” Display, Apple M1 Chip With 8-Core",
-    "KIA TELLURIDE 2022",
-    "SAMSUNG FRONT LOAD WASHING MACHINE 16KG",
-    "10GRAMS GOLD COIN",
-    "VOUCHER FOR GEORGIA FAMILY TRIP UPTO 4",
-    "AMAZON GIFT VOUCHER WORTH 1000AED",
-    "APPLE AIRPODS PRO",
+    "ايفون",
+    "سماعة",  
+    "تلفزيون ",
+    "لابتوب",
+    "ثلاجة",
+    "غسالة",
+    "ريال",
+    "قرشين",
+    "بطاقة هدايا",
+    "سماعة ايربودز",
   ];
 
   const weelColors = () => {
     let arr = [];
-    let colors = ["#EE4040", "#F0CF50", "#815CD1", "#3DA5E0", "#34A24F"];
+    let colors = ["#36A1BC", "#0B4F6A", "#90CBDA", "#228DA8", "#052C36"];
     segments.forEach((el) => {
       let color = colors.shift();
       arr.push(color);
@@ -50,78 +38,80 @@ const App = () => {
     return arr;
   };
   const segColors = weelColors();
-
-  useEffect(() => {
-    const fetchUserIP = async () => {
-      try {
-        const ipResponse = await axios.get('https://api.ipify.org?format=json');
-        setUserIP(ipResponse.data.ip);  
-        console.log("userip", userIP);  
-        console.log(ipResponse.data.ip);      
-      } catch (error) {
-        console.error('Error fetching IP:', error);
-      }
-    };
-
-    fetchUserIP();
-  }, [userIP]);
-
+  const fetchUserIP = async () => {
+    try {
+      const ipResponse = await axios.get('https://api.ipify.org?format=json');
+      setUserIP(ipResponse.data.ip);
+      console.log("ip  ", ipResponse.data.ip);
+      console.log("userIp  ", userIP);
+      return ipResponse.data.ip; // Return the fetched IP address
+    } catch (error) {
+      console.error('Error fetching IP:', error);
+      return null;
+    }
+  };
+  
   const onFinished = async (winner) => {
     setPortal(false);
     setShow(winner);
+  
+    const userIp = await fetchUserIP(); // Wait for fetchUserIP to complete
+    
     console.log("winner", winner);
-      try {
-        const response = await axios.post('https://64d8b3c25f9bf5b879ce7999.mockapi.io/users', {
-          winner: winner,
-          ip: userIP
-        });
-        console.log(response.data);
-        alert("Winner is: " + winner);
-      } catch (error) {
-        console.error('Error posting data:', error);
-      }
+    if (!userIp) {
+      console.error('User IP not available.');
+      return;
+    }
+    try {
+      const response = await axios.post('https://64d8b3c25f9bf5b879ce7999.mockapi.io/users', {
+        winner: winner,
+        ip: userIp // Use the fetched IP address
+      });
+      console.log("userIP", userIp);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
   };
-
+  
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        paddingTop: "150px",
-        paddingBottom: "150px",
-        background: "#f0f0f0",
-      }}
+    <>
+    <div className="h-[110vh] p-4 w-full relative bg-[#122e4a] flex flex-col justify-center items-center gap-5"
     >
-      <Test />
-      {show && <Confetti width={1600} height={1019} />}
+      {/* <Test /> */}
+      <h1 className="text-center font-bold text-7xl text-cyan-100 ">عجلة مسار</h1>
+      {show && <Confetti width={600} height={1120} />}
       <WheelComponent
         segments={segments}
         segColors={segColors}
         winningSegment={"8"}
         onFinished={(winner) => onFinished(winner)}
-        primaryColor="gray"
+        primaryColor="#5C9DAE"
         contrastColor="white"
         buttonText="Spin"
         isOnlyOnce={true}
       />
       {portal && <TrPortal />}
       {show && (
-        <div className="box absolute bg-white">
-          <div className="imageBox"></div>
-          <h2 className="titleWin">
-            CONGRATULATIONS!!! YOU HAVE WON {show} !!!
+        <div className=" absolute h-[210vh] w-[153vw] text-center py-20 px-5  bg-slate-600/50 flex flex-col justify-around">
+          <div className="bg-slate-50 w-full py-20 p-5 rounded-md shadow-lg flex flex-col gap-16">
+          <h2 className="text-5xl">
+            مبروك!!! فزت معنا ب{show} !!!
           </h2>
-          <div className="closeContainer">
+          <div className="">
             <button
-              className="closepankaj"
+              className="text-5xl text-white font-semibold bg-cyan-500 p-3 px-16"
               onClick={() => setShow(false)}
             >
-              OK
+              تمام
             </button>
+          </div>
           </div>
         </div>
       )}
     </div>
+    </>
+
   );
 };
 

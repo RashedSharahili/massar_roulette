@@ -18,7 +18,6 @@ const IPTracker = () => {
             setIpExists(true);
           }else{
             setResponseMessage('Your IP has been not added to the database.');
-            setIpExists(false);
           }
         } catch (error) {
           console.error('Error fetching IP:', error);
