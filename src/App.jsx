@@ -84,7 +84,10 @@ const App = () => {
       <div className="">
         <button
           className="text-5xl text-white font-semibold bg-cyan-500 p-3 px-16"
-          onClick={() => setShow(false)}
+          onClick={() => {
+            setShow(false);
+            window.location.reload();
+          }}
         >
           تم
         </button>
