@@ -76,9 +76,11 @@ const App = () => {
   
   return (
     <>
-    <div className="h-screen p-4 w-full relative flex flex-col justify-center items-center gap-5"
+      <Test />
+    <div className=" p-4 block h-screen w-[153vw] relative text-center mx-auto"
     >
-      {/* <Test /> */}
+      <div className="flex flex-col items-center gap-10">
+      <img src="./src/assets/massar_logo.png" alt="" className="w-80  pb-20" />
       <h1 className="text-center font-bold text-7xl text-cyan-100 ">ضربة حظ!</h1>
       {show && <Confetti width={600} height={1120} />}
       <WheelComponent
@@ -91,6 +93,7 @@ const App = () => {
         buttonText="ابدأ"
         isOnlyOnce={true}
       />
+      </div>
       {portal && <TrPortal />}
       {show && (
         <div className=" absolute h-[210vh] w-[153vw] text-center py-20 px-5  bg-slate-600/50 flex flex-col justify-around">
