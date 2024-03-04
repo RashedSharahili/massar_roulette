@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import OopsImg from './assets/CartoonStyleRobot.png'
 
 const IPTracker = () => {
     const [userIP, setUserIP] = useState('');
@@ -43,16 +44,20 @@ const IPTracker = () => {
     //   }
     // };
     const Popup = () => (
-      <div className="popup h-5/6 text-6xl flex flex-col justify-center items-center bg-white w-11/12 rounded-xl text-center">
-        <img src="./src/assets/CartoonStyleRobot.png" alt="" />
+      <div className='absolute bg-slate-800/60 h-full w-full flex items-center justify-center  z-50'>
+
+      <div className="popup h-5/6 text-5xl flex flex-col justify-center items-center bg-white w-11/12 rounded-xl text-center">
+        <img src={OopsImg} alt="" />
         <p>  يبدو انك سبق وجربت حظك </p>
       </div>
+      </div>
+
     );
   
     return (
-      <div className='absolute bg-slate-800/60 h-[93rem] w-[43rem] flex items-center justify-center  z-50'>
+      <>
       {ipExists && <Popup />}
-    </div>
+      </>
     );
   };
   

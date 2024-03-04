@@ -17,16 +17,16 @@ const WheelComponent = ({
   const timerDelay = segments.length;
   let angleCurrent = 0;
   let angleDelta = 0;
-  const size = 290;
+  const size = 170;
   let canvasContext = null;
   let maxSpeed = Math.PI / `${segments.length}`;
   const upTime = segments.length * 100;
   const downTime = segments.length * 1000;
   let spinStart = 0;
   let frames = 0;
-  const centerX = 300;
-  const centerY = 300;
-  const [canvasSize, setCanvasSize] = useState({ width: 600, height: 600 });
+  const centerX = 210;
+  const centerY = 210;
+  const [canvasSize, setCanvasSize] = useState({ width: 400, height: 400 });
   useEffect(() => {
     wheelInit();
     setTimeout(() => {
@@ -128,7 +128,7 @@ const WheelComponent = ({
     ctx.translate(centerX, centerY);
     ctx.rotate((lastAngle + angle) / 2);
     ctx.fillStyle =  "white";
-    ctx.font = "bold 2em Segoe UI";
+    ctx.font = "bold 1.2em Segoe UI";
     ctx.fillText(value.substr(0, 21), size / 2 + 20, 0);
     ctx.restore();
   };
@@ -205,8 +205,8 @@ const WheelComponent = ({
   return (
     <canvas
       id="canvas"
-      width="600"
-      height="600"
+      width="390"
+      height="400"
       style={{
         pointerEvents: isFinished && !isOnlyOnce ? "none" : "auto"
       }}

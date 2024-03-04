@@ -6,6 +6,7 @@ import TrPortal from "./portal";
 import Confetti from "react-confetti";
 import Test from "./test";
 import axios from "axios";
+import masarLogo from './assets/massar_logo.png';
 
 const App = () => {
   const [portal, setPortal] = useState(false);
@@ -23,7 +24,7 @@ const App = () => {
     "ريال",
     "قرشين",
     "بطاقة هدايا",
-    "سماعة ايربودز",
+    " ايربودز",
   ];
 
   const weelColors = () => {
@@ -73,16 +74,40 @@ const App = () => {
       console.error('Error posting data:', error);
     }
   };
+  const WinPopup = () => (
+    <div className="absolute -top-1 z-50 w-full h-full">
+    <div className=" absolute h-full w-full text-center py-20 px-5  bg-slate-600/50 flex flex-col justify-around">
+      <div className="bg-slate-50 w-full py-20 p-5 rounded-md shadow-lg flex flex-col gap-16">
+      <h2 className="text-5xl">
+        مبروك!!! فزت معنا ب{show} !!!
+      </h2>
+      <div className="">
+        <button
+          className="text-5xl text-white font-semibold bg-cyan-500 p-3 px-16"
+          onClick={() => setShow(false)}
+        >
+          تم
+        </button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  );
   
   return (
     <>
       <Test />
-    <div className=" p-4 block h-screen w-[153vw] relative text-center mx-auto"
+    <div className=" block h-screen w-screen relative text-center "
     >
-      <div className="flex flex-col items-center gap-10">
-      <img src="./src/assets/massar_logo.png" alt="" className="w-80  pb-20" />
-      <h1 className="text-center font-bold text-7xl text-cyan-100 ">ضربة حظ!</h1>
-      {show && <Confetti width={600} height={1120} />}
+      <div className="flex flex-col h-full justify-start items-center gap-2 relative w-screen">
+      <img src={masarLogo} alt="" className="w-52  pb-10" />
+      <h1 className="text-center font-bold text-5xl text-cyan-50 ">ضربة حظ!</h1>
+      {show && <Confetti width={380} height={1120} />}
+      {portal && <TrPortal />}
+      {show && <WinPopup />}
+        <div className="w-screen">
+
       <WheelComponent
         segments={segments}
         segColors={segColors}
@@ -92,27 +117,12 @@ const App = () => {
         contrastColor="white"
         buttonText="ابدأ"
         isOnlyOnce={true}
-      />
-      </div>
-      {portal && <TrPortal />}
-      {show && (
-        <div className=" absolute h-[210vh] w-[153vw] text-center py-20 px-5  bg-slate-600/50 flex flex-col justify-around">
-          <div className="bg-slate-50 w-full py-20 p-5 rounded-md shadow-lg flex flex-col gap-16">
-          <h2 className="text-5xl">
-            مبروك!!! فزت معنا ب{show} !!!
-          </h2>
-          <div className="">
-            <button
-              className="text-5xl text-white font-semibold bg-cyan-500 p-3 px-16"
-              onClick={() => setShow(false)}
-            >
-              تم
-            </button>
-          </div>
-          </div>
+        />
         </div>
-      )}
-    </div>
+      </div>
+
+     
+      </div>
     </>
 
   );
