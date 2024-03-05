@@ -133,7 +133,7 @@ const Name = localStorage.getItem("user_name");
             <WheelComponent
               segments={segments}
               segColors={segColors}
-              winningSegment={"3"}
+              winningSegment={"8"}
               onFinished={(winner) => onFinished(winner)}
               primaryColor="#5C9DAE"
               contrastColor="white"

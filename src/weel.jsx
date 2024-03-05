@@ -24,8 +24,8 @@ const WheelComponent = ({
   const downTime = segments.length * 1000;
   let spinStart = 0;
   let frames = 0;
-  const centerX = 210;
-  const centerY = 210;
+  const centerX = 200;
+  const centerY = 200;
   const [canvasSize, setCanvasSize] = useState({ width: 400, height: 400 });
   useEffect(() => {
     wheelInit();
@@ -167,7 +167,7 @@ const WheelComponent = ({
 
     // Draw a center circle
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 30, 0, PI2, false);
+    ctx.arc(centerX, centerY, 50, 0, PI2, false);
     ctx.closePath();
     ctx.fillStyle = primaryColor || "black";
     ctx.lineWidth = 7;
@@ -191,13 +191,13 @@ const WheelComponent = ({
 
   const drawNeedle = () => {
     const ctx = canvasContext;
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 1;
     ctx.strokeStyle =  "white";
     ctx.fileStyle = "white";
     ctx.beginPath();
-    ctx.moveTo(centerX + 20, centerY - 26);
-    ctx.lineTo(centerX - 20, centerY - 26);
-    ctx.lineTo(centerX, centerY - 50);
+    ctx.moveTo(centerX + 20, centerY - 50);
+    ctx.lineTo(centerX - 20, centerY - 50);
+    ctx.lineTo(centerX, centerY - 70);
     ctx.closePath();
     ctx.fill();
     const change = angleCurrent + Math.PI / 2;
