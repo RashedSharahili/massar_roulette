@@ -31,16 +31,9 @@ const App = () => {
   };
 
   const segments = [
-    "ايفون",
-    "سماعة",
-    "تلفزيون ",
-    "لابتوب",
-    "ثلاجة",
-    "غسالة",
-    "ريال",
-    "قرشين",
-    "بطاقة هدايا",
-    " ايربودز",
+    "كود خصم",
+    "تعديل حساب لينكدان",
+   " مقعد في دورات ومعسكرات مسار ",
   ];
 
   const weelColors = () => {
@@ -140,7 +133,7 @@ const Name = localStorage.getItem("user_name");
             <WheelComponent
               segments={segments}
               segColors={segColors}
-              winningSegment={"8"}
+              winningSegment={"3"}
               onFinished={(winner) => onFinished(winner)}
               primaryColor="#5C9DAE"
               contrastColor="white"

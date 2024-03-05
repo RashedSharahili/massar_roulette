@@ -115,6 +115,16 @@ const WheelComponent = ({
   const drawSegment = (key, lastAngle, angle) => {
     const ctx = canvasContext;
     const value = segments[key];
+    const maxCharsPerLine = 15; // Maximum characters per line
+    const lines = [];
+    let line = '';
+    for (let i = 0; i < value.length; i++) {
+      line += value[i];
+      if (line.length === maxCharsPerLine || i === value.length - 1) {
+        lines.push(line);
+        line = '';
+      }
+    }
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
@@ -127,11 +137,17 @@ const WheelComponent = ({
     ctx.save();
     ctx.translate(centerX, centerY);
     ctx.rotate((lastAngle + angle) / 2);
-    ctx.fillStyle =  "white";
-    ctx.font = "bold 1.2em Segoe UI";
-    ctx.fillText(value.substr(0, 21), size / 2 + 20, 0);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 1em Segoe UI";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    lines.forEach((line, index) => {
+      ctx.fillText(line, size / 2 + 20, (index - (lines.length - 1) / 2) * 20);
+    });
     ctx.restore();
   };
+  
+  
 
   const drawWheel = () => {
     const ctx = canvasContext;
@@ -151,10 +167,10 @@ const WheelComponent = ({
 
     // Draw a center circle
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 50, 0, PI2, false);
+    ctx.arc(centerX, centerY, 30, 0, PI2, false);
     ctx.closePath();
     ctx.fillStyle = primaryColor || "black";
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 7;
     ctx.strokeStyle = contrastColor || "white";
     ctx.fill();
     ctx.font = "bold 1.5em proxima-nova";
@@ -168,20 +184,20 @@ const WheelComponent = ({
     ctx.arc(centerX, centerY, size, 0, PI2, false);
     ctx.closePath();
 
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 5;
     ctx.strokeStyle = "#C5DAE4";
     ctx.stroke();
   };
 
   const drawNeedle = () => {
     const ctx = canvasContext;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 4;
     ctx.strokeStyle =  "white";
     ctx.fileStyle = "white";
     ctx.beginPath();
-    ctx.moveTo(centerX + 20, centerY - 50);
-    ctx.lineTo(centerX - 20, centerY - 50);
-    ctx.lineTo(centerX, centerY - 70);
+    ctx.moveTo(centerX + 20, centerY - 26);
+    ctx.lineTo(centerX - 20, centerY - 26);
+    ctx.lineTo(centerX, centerY - 50);
     ctx.closePath();
     ctx.fill();
     const change = angleCurrent + Math.PI / 2;
